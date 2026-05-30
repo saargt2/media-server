@@ -11,6 +11,16 @@ export const ApiResponseSchema = <T extends z.ZodTypeAny>(dataSchema: T) =>
     error: z.string().optional(),
   });
 
+/** Success response with literal `true` type — use for endpoints that always succeed */
+export const SuccessResponseSchema = <T extends z.ZodTypeAny>(dataSchema: T) =>
+  z.object({ success: z.literal(true), data: dataSchema });
+
+/** Error response with literal `false` type — use for known error cases */
+export const ErrorResponseSchema = z.object({
+  success: z.literal(false),
+  error: z.string(),
+});
+
 /** Paginated list result */
 export const PaginatedResultSchema = <T extends z.ZodTypeAny>(itemSchema: T) =>
   z.object({

@@ -52,7 +52,7 @@ export const DownloadRequestSchema = z.object({
   filePriorities: z
     .array(
       z.object({
-        index: z.number().int().nonnegative(),
+        fileId: z.number().int().nonnegative(),
         priority: z.number().int().min(0).max(7),
       }),
     )
@@ -68,20 +68,22 @@ export const FilePriorityUpdateSchema = z.object({
   /** File index to priority mappings */
   priorities: z.array(
     z.object({
-      index: z.number().int().nonnegative(),
-      priority: z.number().int().min(0).max(7),
+      fileId: z.coerce.number().int().nonnegative(),
+      priority: z.coerce.number().int().min(0).max(7),
     }),
   ),
 });
+
+export const FilePrioritiesSchema = FilePriorityUpdateSchema.shape.priorities;
 
 export type FilePriorityUpdate = z.infer<typeof FilePriorityUpdateSchema>;
 
 /** Adjusts seed limits on an active torrent */
 export const DownloadLimitUpdateSchema = z.object({
   /** New share ratio limit (omit to leave unchanged) */
-  seedLimit: z.number().min(0).optional(),
+  seedLimit: z.coerce.number().min(0).optional(),
   /** New seeding time limit in seconds (omit to leave unchanged) */
-  seedTimeLimit: z.number().int().min(0).optional(),
+  seedTimeLimit: z.coerce.number().int().min(0).optional(),
 });
 
 export type DownloadLimitUpdate = z.infer<typeof DownloadLimitUpdateSchema>;

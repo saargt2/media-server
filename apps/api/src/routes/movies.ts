@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { FastifyPluginAsyncZod } from '@fastify/type-provider-zod';
 import * as tmdb from '../services/tmdb';
+import { SuccessResponseSchema, ErrorResponseSchema } from '@media-server/shared';
 
 const SearchParamsSchema = z.object({
   q: z.string().min(2).describe('Search query (min 2 characters)'),
@@ -16,10 +17,7 @@ const moviesRoutes: FastifyPluginAsyncZod = async (fastify) => {
     schema: {
       querystring: SearchParamsSchema,
       response: {
-        200: z.object({
-          success: z.literal(true),
-          data: z.any().describe('TMDB movie search result'),
-        }),
+        200: SuccessResponseSchema(z.any().describe('TMDB movie search result')),
       },
     },
   }, async (request) => {
@@ -31,14 +29,8 @@ const moviesRoutes: FastifyPluginAsyncZod = async (fastify) => {
     schema: {
       params: IdParamsSchema,
       response: {
-        200: z.object({
-          success: z.literal(true),
-          data: z.any().describe('TMDB movie details'),
-        }),
-        400: z.object({
-          success: z.literal(false),
-          error: z.string(),
-        }),
+        200: SuccessResponseSchema(z.any().describe('TMDB movie details')),
+        400: ErrorResponseSchema,
       },
     },
   }, async (request) => {
