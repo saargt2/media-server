@@ -13,6 +13,8 @@ import { API_PREFIX } from '@media-server/shared';
 import { loadConfig } from './config';
 import tvRoutes from './routes/tv';
 import moviesRoutes from './routes/movies';
+import searchRoutes from './routes/search';
+import downloadRoutes from './routes/downloads';
 
 loadConfig();
 
@@ -38,6 +40,8 @@ await app.register(swaggerUi, {
 
 await app.register(tvRoutes, { prefix: `${API_PREFIX}/tv` });
 await app.register(moviesRoutes, { prefix: `${API_PREFIX}/movies` });
+await app.register(searchRoutes, { prefix: `${API_PREFIX}/search` });
+await app.register(downloadRoutes, { prefix: `${API_PREFIX}/downloads` });
 
 app.get(`${API_PREFIX}/health`, {
   schema: {
